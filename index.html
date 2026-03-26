@@ -211,18 +211,19 @@
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwOcV8gYNnkRoO9wMstvv5E5td01mUX8dGS0X3kLAsO5a7LvE_8n9Djd1kYxoW1ZQLkYw/exec";
 const weights = [125,133,141,149,157,165,174,184,197,285];
 
-const wrestlerDB = [
-  {name:"Patrick Glory",school:"Princeton",weight:125},{name:"Brandon Kaylor",school:"Oregon State",weight:125},{name:"Kyle Parco",school:"Arizona State",weight:125},{name:"Liam Cronin",school:"Nebraska",weight:125},{name:"Nico Provo",school:"Penn State",weight:125},{name:"Drew Hildebrandt",school:"Central Mich.",weight:125},{name:"Jack Medley",school:"Purdue",weight:125},{name:"Tristan Lujan",school:"Michigan",weight:125},
-  {name:"Roman Bravo-Young",school:"Penn State",weight:133},{name:"Dean Hamiti",school:"Wisconsin",weight:133},{name:"Patrick McKee",school:"Minnesota",weight:133},{name:"Quincy Monday",school:"Cornell",weight:133},{name:"Ridge Lovett",school:"Nebraska",weight:133},{name:"Beau Bartlett",school:"Penn State",weight:133},{name:"Vito Arujau",school:"Cornell",weight:133},{name:"Jake Rundell",school:"Illinois",weight:133},
-  {name:"Nick Lee",school:"Penn State",weight:141},{name:"Shane Griffith",school:"Stanford",weight:141},{name:"Sammy Sasso",school:"Ohio State",weight:141},{name:"Cayden Rooks",school:"Missouri",weight:141},{name:"Kyle Burwick",school:"Wisconsin",weight:141},{name:"Caleb Henson",school:"Virginia Tech",weight:141},{name:"Josh Humphreys",school:"Lehigh",weight:141},{name:"Zach Sherman",school:"Oklahoma",weight:141},
-  {name:"Yianni Diakomihalis",school:"Cornell",weight:149},{name:"Kanen Storr",school:"Michigan",weight:149},{name:"Austin Gomez",school:"Wisconsin",weight:149},{name:"Mikey Labriola",school:"Nebraska",weight:149},{name:"Jarrett Jacques",school:"Missouri",weight:149},{name:"Graham Rini",school:"Ohio State",weight:149},{name:"Tanner Cook",school:"South Dakota St",weight:149},{name:"Will Lewan",school:"Michigan",weight:149},
-  {name:"David Carr",school:"Iowa State",weight:157},{name:"Keegan O'Toole",school:"Missouri",weight:157},{name:"Hayden Hidlay",school:"NC State",weight:157},{name:"Kendall Coleman",school:"Purdue",weight:157},{name:"Tanner Sloan",school:"South Dakota St",weight:157},{name:"Kaleb Young",school:"Iowa",weight:157},{name:"Peyton Mocco",school:"Missouri",weight:157},{name:"Will Lewan",school:"Michigan",weight:157},
-  {name:"Mekhi Lewis",school:"Virginia Tech",weight:165},{name:"Vincenzo Joseph",school:"Penn State",weight:165},{name:"Peyton Robb",school:"Nebraska",weight:165},{name:"Nate Jackson",school:"Lehigh",weight:165},{name:"Shane Griffith",school:"Stanford",weight:165},{name:"Ryan Burgos",school:"Virginia",weight:165},{name:"Isaiah White",school:"Nebraska",weight:165},{name:"Cohlton Schultz",school:"Arizona State",weight:165},
-  {name:"Carter Starocci",school:"Penn State",weight:174},{name:"Michael Kemerer",school:"Iowa",weight:174},{name:"Ethan Smith",school:"Ohio State",weight:174},{name:"Brodey Gorman",school:"Oklahoma",weight:174},{name:"Marlon Yarbrough",school:"NC State",weight:174},{name:"Dylan Lydy",school:"Purdue",weight:174},{name:"Trent Hidlay",school:"NC State",weight:174},{name:"Liam Hickey",school:"Boston University",weight:174},
-  {name:"Aaron Brooks",school:"Penn State",weight:184},{name:"Trent Hidlay",school:"NC State",weight:184},{name:"Cameron Caffey",school:"Michigan State",weight:184},{name:"Myles Amine",school:"Michigan",weight:184},{name:"Logan Massa",school:"Michigan",weight:184},{name:"Rocky Elam",school:"Missouri",weight:184},{name:"Donnell Washington",school:"NC State",weight:184},{name:"Christian Lance",school:"Nebraska",weight:184},
-  {name:"Max Dean",school:"Penn State",weight:197},{name:"Nino Bonaccorsi",school:"Pittsburgh",weight:197},{name:"Abe Assad",school:"Wisconsin",weight:197},{name:"Rocky Elam",school:"Missouri",weight:197},{name:"Kollin Moore",school:"Ohio State",weight:197},{name:"Wyatt Hendrickson",school:"Air Force",weight:197},{name:"Tanner Sloan",school:"South Dakota St",weight:197},{name:"Ben Goldin",school:"Harvard",weight:197},
-  {name:"Mason Parris",school:"Michigan",weight:285},{name:"Tony Cassioppi",school:"Iowa",weight:285},{name:"Gable Steveson",school:"Minnesota",weight:285},{name:"Greg Kerkvliet",school:"Penn State",weight:285},{name:"Luke Luffman",school:"Illinois",weight:285},{name:"Christian Lance",school:"Nebraska",weight:285},{name:"Trent Hillger",school:"Wisconsin",weight:285},{name:"Cohlton Schultz",school:"Arizona State",weight:285},
-];
+let wrestlerDB = []; // loaded from Google Sheet
+
+async function fetchWrestlers() {
+  try {
+    const res = await fetch(`${APPS_SCRIPT_URL}?action=wrestlers`);
+    const data = await res.json();
+    if (data.wrestlers && data.wrestlers.length) {
+      wrestlerDB = data.wrestlers;
+    }
+  } catch(e) {
+    console.warn('Could not load wrestlers from Sheet:', e);
+  }
+}
 
 let activeWeight = 125;
 let picks = {};
@@ -456,7 +457,7 @@ function renderStats() {
 }
 
 (async () => {
-  await fetchWeekInfo();
+  await Promise.all([fetchWeekInfo(), fetchWrestlers()]);
   renderWeightSelector(); renderBallotCard(); renderProgress(); renderStats();
   fetchResults(activeWeight);
 })();
