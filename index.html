@@ -1,192 +1,490 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MatConsensus — NCAA Wrestling Rankings</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <title>The Fan's Vote — NCAA Wrestling Rankings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,700&family=DM+Mono:wght@400;500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #0a0a0a; --surface: #111111; --border: #222222;
-      --gold: #c9a84c; --gold-dim: #7a6130; --red: #c0392b;
-      --text: #e8e8e8; --muted: #666666;
-      --rank1: #c9a84c; --rank2: #a8a8a8; --rank3: #8b6340;
+      --bg: #f5f4f0;
+      --surface: #ffffff;
+      --surface2: #eeede9;
+      --border: #dddbd5;
+      --border-dark: #c8c5bc;
+      --accent: #c0392b;
+      --accent-dim: rgba(192,57,43,0.08);
+      --accent2: #1a1a2e;
+      --text: #1c1c1c;
+      --muted: #888880;
+      --muted2: #b0aea6;
+      --gold: #c9a84c;
+      --green: #2e7d52;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Lato', sans-serif;
+      min-height: 100vh;
+    }
 
     /* NAV */
-    header { border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; background: rgba(10,10,10,0.95); backdrop-filter: blur(10px); z-index: 100; }
-    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.1em; color: var(--gold); }
-    .logo span { color: var(--text); }
-    .nav-links { display: flex; gap: 1.5rem; }
-    .nav-links a { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.15s; }
-    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
-    .header-meta { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); text-align: right; line-height: 1.6; }
-    .live-dot { display: inline-block; width: 6px; height: 6px; background: #2ecc71; border-radius: 50%; margin-right: 5px; animation: pulse 2s infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    header {
+      background: var(--accent2);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+      position: sticky; top: 0; z-index: 100;
+    }
 
-    /* HERO */
-    .hero-band { background: linear-gradient(135deg, #111 0%, #1a1208 50%, #111 100%); border-bottom: 1px solid var(--border); padding: 2.5rem 2rem 2rem; position: relative; overflow: hidden; }
-    .hero-band::before { content: 'MAT CONSENSUS'; position: absolute; top: -10px; right: -20px; font-family: 'Bebas Neue', sans-serif; font-size: 9rem; color: rgba(201,168,76,0.04); letter-spacing: 0.05em; pointer-events: none; white-space: nowrap; }
-    .hero-band h1 { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; letter-spacing: 0.06em; line-height: 1; margin-bottom: 0.4rem; }
-    .hero-band h1 em { color: var(--gold); font-style: normal; }
-    .hero-band p { color: var(--muted); font-size: 0.85rem; max-width: 520px; }
-    .sources-badge { display: flex; gap: 0.5rem; margin-top: 1.2rem; flex-wrap: wrap; }
-    .badge { font-family: 'DM Mono', monospace; font-size: 0.65rem; padding: 3px 8px; border: 1px solid var(--border); color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; border-radius: 2px; }
-    .badge.active { border-color: var(--gold-dim); color: var(--gold); }
+    .logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem; font-weight: 800;
+      letter-spacing: 0.06em; color: #fff;
+      text-transform: uppercase;
+    }
 
-    /* CONTROLS */
-    .controls { padding: 1.2rem 2rem; display: flex; gap: 1rem; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-    .weight-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
-    .weight-btn { font-family: 'DM Mono', monospace; font-size: 0.72rem; padding: 5px 10px; background: transparent; border: 1px solid var(--border); color: var(--muted); cursor: pointer; transition: all 0.15s; border-radius: 2px; }
-    .weight-btn:hover { border-color: var(--gold-dim); color: var(--text); }
-    .weight-btn.active { background: var(--gold); border-color: var(--gold); color: #000; font-weight: 500; }
+    .logo em {
+      color: var(--accent);
+      font-style: normal;
+    }
 
-    /* MAIN */
-    .main { display: grid; grid-template-columns: 1fr 300px; gap: 0; max-width: 1200px; margin: 0 auto; }
-    .rankings-panel { border-right: 1px solid var(--border); padding: 1.5rem 2rem; }
-    .weight-label { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--gold); letter-spacing: 0.05em; margin-bottom: 1.2rem; display: flex; align-items: baseline; gap: 0.5rem; }
-    .weight-label span { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); letter-spacing: 0.08em; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a.active { color: var(--accent); }
 
-    /* COMMUNITY RESULTS TABLE */
+    .header-right {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem; color: rgba(255,255,255,0.35);
+      letter-spacing: 0.08em; text-align: right; line-height: 1.7;
+    }
+
+    .live-dot {
+      display: inline-block; width: 5px; height: 5px;
+      background: #2ecc71; border-radius: 50%;
+      margin-right: 4px; animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* MASTHEAD */
+    .masthead {
+      background: var(--surface);
+      border-bottom: 3px solid var(--accent2);
+      padding: 2rem 2rem 1.8rem;
+    }
+
+    .masthead-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: flex-end;
+      justify-content: space-between; gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .masthead h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 800; line-height: 0.95;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+    }
+
+    .masthead h1 .line2 {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .masthead-meta {
+      text-align: right;
+    }
+
+    .masthead-meta p {
+      font-size: 0.82rem; color: var(--muted);
+      max-width: 280px; line-height: 1.5;
+      margin-bottom: 0.8rem;
+    }
+
+    .tag-row { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }
+
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.58rem; letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border: 1px solid var(--border-dark);
+      color: var(--muted); border-radius: 2px;
+    }
+    .tag.hot { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+    /* WEIGHT TABS */
+    .controls {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .controls-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; gap: 0; align-items: center;
+    }
+
+    .weight-btn {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 12px 16px;
+      background: transparent;
+      border: none; border-bottom: 3px solid transparent;
+      color: var(--muted); cursor: pointer;
+      transition: all 0.13s; white-space: nowrap;
+    }
+    .weight-btn:hover { color: var(--text); border-bottom-color: var(--border-dark); }
+    .weight-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* MAIN LAYOUT */
+    .main {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 290px;
+      gap: 0; padding: 0;
+    }
+
+    /* RANKINGS PANEL */
+    .rankings-panel {
+      padding: 2rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .panel-header {
+      display: flex; align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid var(--accent2);
+    }
+
+    .panel-weight {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.8rem; font-weight: 800;
+      letter-spacing: 0.03em; text-transform: uppercase;
+    }
+
+    .panel-weight span {
+      font-size: 1rem; font-weight: 400;
+      color: var(--muted); margin-left: 6px;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.06em;
+    }
+
+    .panel-ballot-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem; color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* TABLE */
     table { width: 100%; border-collapse: collapse; }
-    thead tr { border-bottom: 1px solid var(--border); }
-    thead th { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; padding: 0 0.75rem 0.6rem; text-align: left; }
-    thead th:first-child { padding-left: 0; width: 36px; }
-    thead th.center { text-align: center; }
-    tbody tr { border-bottom: 1px solid #191919; transition: background 0.12s; }
-    tbody tr:hover { background: #151515; }
-    td { padding: 0.8rem 0.75rem; font-size: 0.88rem; }
-    td:first-child { padding-left: 0; width: 36px; }
-    .rank-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--muted); }
-    tr:nth-child(1) .rank-num { color: var(--rank1); }
-    tr:nth-child(2) .rank-num { color: var(--rank2); }
-    tr:nth-child(3) .rank-num { color: var(--rank3); }
-    .wrestler-name { font-weight: 600; color: var(--text); font-size: 0.92rem; }
-    .wrestler-school { font-size: 0.73rem; color: var(--muted); font-family: 'DM Mono', monospace; margin-top: 1px; }
-    .consensus-score { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; text-align: center; }
-    tr:nth-child(1) .consensus-score { color: var(--rank1); }
-    tr:nth-child(2) .consensus-score { color: var(--rank2); }
-    tr:nth-child(3) .consensus-score { color: var(--rank3); }
-    tr:nth-child(n+4) .consensus-score { color: var(--text); }
 
-    /* EMPTY STATE */
-    .empty-state { padding: 3rem 0; text-align: center; }
-    .empty-state p { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--muted); margin-bottom: 1rem; }
-    .btn-vote { font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 0.1em; padding: 8px 20px; background: var(--gold); color: #000; border: none; border-radius: 2px; cursor: pointer; text-decoration: none; display: inline-block; }
-    .btn-vote:hover { background: #e8bb50; }
+    thead th {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--muted2);
+      padding: 0 1rem 0.5rem 0; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    thead th:first-child { width: 40px; padding-left: 0; }
+    thead th.right { text-align: right; padding-right: 0; }
 
-    /* LOADING */
-    .table-loading { padding: 2rem 0; font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; }
-    .spinner { display: inline-block; width: 10px; height: 10px; border: 1px solid var(--gold-dim); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; }
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    tbody tr:hover { background: var(--surface2); }
+    tbody tr:last-child { border-bottom: none; }
+
+    td { padding: 0.85rem 1rem 0.85rem 0; vertical-align: middle; }
+    td:first-child { padding-left: 0; width: 40px; }
+    td.right { text-align: right; padding-right: 0; }
+
+    .rank-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--muted2); line-height: 1;
+    }
+    tr:nth-child(1) .rank-num { color: var(--gold); }
+    tr:nth-child(2) .rank-num { color: #888; }
+    tr:nth-child(3) .rank-num { color: #a0845c; }
+
+    .rank-medal {
+      font-size: 0.7rem;
+      display: block;
+    }
+
+    .wrestler-name {
+      font-weight: 700; font-size: 1rem;
+      color: var(--text); line-height: 1.2;
+    }
+
+    .wrestler-school {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem; color: var(--muted);
+      margin-top: 2px; letter-spacing: 0.04em;
+    }
+
+    .points-col {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.6rem; font-weight: 700;
+      color: var(--accent2); text-align: right;
+    }
+    tr:nth-child(1) .points-col { color: var(--accent); }
+
+    .points-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem; color: var(--muted2);
+      display: block; text-align: right;
+      letter-spacing: 0.06em;
+    }
+
+    /* BAR */
+    .bar-cell { width: 120px; padding-right: 1rem; }
+    .bar-track { height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.5s ease; }
+    tr:nth-child(1) .bar-fill { background: var(--gold); }
+    tr:nth-child(2) .bar-fill { background: #888; }
+    tr:nth-child(3) .bar-fill { background: #a0845c; }
+
+    /* EMPTY / LOADING */
+    .state-box {
+      padding: 3rem 0; text-align: center;
+    }
+    .state-box p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem; color: var(--muted); margin-bottom: 1.2rem;
+    }
+    .btn-vote {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 10px 22px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 2px; cursor: pointer;
+      text-decoration: none; display: inline-block;
+      transition: background 0.15s;
+    }
+    .btn-vote:hover { background: #a93226; }
+
+    .spinner {
+      display: inline-block; width: 12px; height: 12px;
+      border: 2px solid var(--border-dark);
+      border-top-color: var(--accent);
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+      margin-right: 8px; vertical-align: middle;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* SIDEBAR */
-    .sidebar { padding: 1.5rem; }
-    .sidebar-section { margin-bottom: 2rem; }
-    .sidebar-title { font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 0.8rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); }
+    .sidebar { padding: 2rem 1.5rem; }
+
+    .side-section { margin-bottom: 2rem; }
+
+    .side-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.8rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
 
     /* STATS */
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.5rem; }
-    .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: 3px; padding: 0.7rem; }
-    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--gold); line-height: 1; }
-    .stat-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 0.08em; margin-top: 2px; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px; padding: 0.8rem;
+    }
+    .stat-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem; font-weight: 800;
+      color: var(--accent2); line-height: 1;
+    }
+    .stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem; color: var(--muted);
+      letter-spacing: 0.08em; margin-top: 2px;
+    }
 
-    /* METHODOLOGY */
-    .method-box { background: var(--surface); border: 1px solid var(--border); border-radius: 3px; padding: 0.9rem; font-size: 0.75rem; color: var(--muted); line-height: 1.6; }
-    .method-box strong { color: var(--text); display: block; margin-bottom: 0.3rem; font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    /* HOW IT WORKS */
+    .how-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent2);
+      border-radius: 0 3px 3px 0;
+      padding: 1rem;
+      font-size: 0.78rem; color: var(--muted);
+      line-height: 1.7;
+    }
+    .how-box strong {
+      display: block; color: var(--text);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: 0.2rem; margin-top: 0.6rem;
+    }
+    .how-box strong:first-child { margin-top: 0; }
 
     /* CTA */
-    .cta-box { background: linear-gradient(135deg, rgba(201,168,76,0.08), transparent); border: 1px solid var(--gold-dim); border-radius: 3px; padding: 1rem; text-align: center; }
-    .cta-box p { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.8rem; line-height: 1.5; }
-    .cta-box strong { color: var(--gold); }
+    .cta-box {
+      background: var(--accent2);
+      border-radius: 3px; padding: 1.2rem;
+      text-align: center;
+    }
+    .cta-box p {
+      font-size: 0.82rem; color: rgba(255,255,255,0.7);
+      margin-bottom: 1rem; line-height: 1.5;
+    }
+    .cta-box strong { color: #fff; }
+    .cta-btn {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 10px 22px;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 2px; cursor: pointer;
+      text-decoration: none; display: inline-block;
+      transition: background 0.15s;
+    }
+    .cta-btn:hover { background: #e74c3c; }
 
-    footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; }
-    footer p { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); }
-    footer a { color: var(--gold); text-decoration: none; }
+    footer {
+      background: var(--accent2);
+      padding: 1.2rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 2rem; flex-wrap: wrap; gap: 0.5rem;
+    }
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem; color: rgba(255,255,255,0.35);
+      letter-spacing: 0.06em;
+    }
+    footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+    footer a:hover { color: #fff; }
 
     @media (max-width: 768px) {
       .main { grid-template-columns: 1fr; }
       .sidebar { border-top: 1px solid var(--border); }
-      .hero-band::before { display: none; }
+      .masthead-inner { flex-direction: column; align-items: flex-start; }
+      .masthead-meta { text-align: left; }
+      .tag-row { justify-content: flex-start; }
+      .bar-cell { display: none; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div style="display:flex;align-items:center;gap:2rem;">
-    <div class="logo">Mat<span>Consensus</span></div>
-    <nav class="nav-links">
-      <a href="index.html" class="active">Rankings</a>
-      <a href="poll.html">Community Poll</a>
-    </nav>
-  </div>
-  <div class="header-meta">
+  <div class="logo">The Fan's <em>Vote</em></div>
+  <nav class="nav-links">
+    <a href="index.html" class="active">Rankings</a>
+    <a href="poll.html">Cast Your Vote</a>
+  </nav>
+  <div class="header-right">
     <div><span class="live-dot"></span>COMMUNITY POWERED</div>
-    <div id="weekLabel">OFF-SEASON</div>
+    <div id="weekLabel">NCAA WRESTLING</div>
   </div>
 </header>
 
-<div class="hero-band">
-  <h1>Fan <em>Consensus</em> Rankings</h1>
-  <p>Built entirely from community ballots. No editorial bias. No paid rankings. Just wrestling fans who know their stuff.</p>
-  <div class="sources-badge">
-    <span class="badge active">COMMUNITY POLL</span>
-    <span class="badge active">WEIGHTED SCORING</span>
-    <span class="badge active">WEEKLY UPDATES</span>
-    <span class="badge">STAT MODEL +SOON</span>
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1>
+      Fan-Powered<br/>
+      <span class="line2">Rankings</span>
+    </h1>
+    <div class="masthead-meta">
+      <p>NCAA Wrestling rankings built entirely from fan ballots. No editorial staff. No paid polls. Just people who watch every match.</p>
+      <div class="tag-row">
+        <span class="tag hot">Fan Votes</span>
+        <span class="tag">Weighted Scoring</span>
+        <span class="tag">All 10 Weights</span>
+        <span class="tag">Weekly Updates</span>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="controls">
-  <div class="weight-tabs" id="weightTabs"></div>
+  <div class="controls-inner" id="weightTabs"></div>
 </div>
 
 <div class="main">
   <div class="rankings-panel">
-    <div class="weight-label" id="weightLabel">125 <span>LBS — COMMUNITY RANKINGS</span></div>
+    <div class="panel-header">
+      <div class="panel-weight" id="panelWeight">125 <span>LBS</span></div>
+      <div class="panel-ballot-count" id="panelBallotCount"></div>
+    </div>
     <div id="tableContainer">
-      <div class="table-loading"><span class="spinner"></span>Loading rankings...</div>
+      <div class="state-box">
+        <p><span class="spinner"></span>Loading rankings...</p>
+      </div>
     </div>
   </div>
 
   <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-title">Poll Stats</div>
+    <div class="side-section">
+      <div class="side-title">Poll Stats</div>
       <div class="stats-grid">
-        <div class="stat-box"><div class="stat-num" id="statWeek">—</div><div class="stat-label">CURRENT WEEK</div></div>
-        <div class="stat-box"><div class="stat-num" id="statBallots">—</div><div class="stat-label">TOTAL BALLOTS</div></div>
-        <div class="stat-box"><div class="stat-num" id="statWeights">10</div><div class="stat-label">WEIGHT CLASSES</div></div>
-        <div class="stat-box"><div class="stat-num">8</div><div class="stat-label">RANKED PER WT</div></div>
+        <div class="stat-box">
+          <div class="stat-num" id="statWeek">—</div>
+          <div class="stat-label">CURRENT WEEK</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="statBallots">—</div>
+          <div class="stat-label">BALLOTS CAST</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">10</div>
+          <div class="stat-label">WEIGHT CLASSES</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">8</div>
+          <div class="stat-label">RANKED PER WT</div>
+        </div>
       </div>
     </div>
 
-    <div class="sidebar-section">
-      <div class="sidebar-title">How It Works</div>
-      <div class="method-box">
+    <div class="side-section">
+      <div class="side-title">How It Works</div>
+      <div class="how-box">
+        <strong>Voting</strong>
+        Fans rank up to 8 wrestlers per weight class each week.
         <strong>Scoring</strong>
-        Fans rank up to 8 wrestlers per weight class. 1st place earns 8 points, 2nd earns 7, down to 8th earning 1 point. Rankings reflect the weighted total across all ballots.<br/><br/>
+        1st place = 8 pts, 2nd = 7 pts, down to 8th = 1 pt. Rankings reflect weighted totals across all ballots.
         <strong>Updates</strong>
-        Rankings refresh live as new ballots come in. A new ballot period opens each week of the season.<br/><br/>
+        Rankings refresh live as new votes come in. A new ballot opens each week of the season.
         <strong>Off-Season</strong>
-        Votes cast now will count toward Week 1 when the season opens in November.
+        Votes cast now count toward Week 1 when the season opens in November.
       </div>
     </div>
 
-    <div class="sidebar-section">
-      <div class="sidebar-title">Cast Your Ballot</div>
+    <div class="side-section">
+      <div class="side-title">Your Voice Matters</div>
       <div class="cta-box">
-        <p>These rankings are only as good as the fans voting. <strong>Add your voice</strong> to the consensus.</p>
-        <a href="poll.html" class="btn-vote">Vote Now →</a>
+        <p>These rankings are only as good as the fans voting. <strong>Add your picks</strong> to shape the consensus.</p>
+        <a href="poll.html" class="cta-btn">Cast Your Vote →</a>
       </div>
     </div>
   </aside>
 </div>
 
 <footer>
-  <p>MatConsensus · Fan-powered NCAA Wrestling Rankings</p>
+  <p>The Fan's Vote · Fan-Powered NCAA Wrestling Rankings · Not affiliated with the NCAA</p>
   <p><a href="https://github.com/adrianstewart-wrestling/MatConsensus">GitHub</a></p>
 </footer>
 
@@ -194,82 +492,93 @@
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwOcV8gYNnkRoO9wMstvv5E5td01mUX8dGS0X3kLAsO5a7LvE_8n9Djd1kYxoW1ZQLkYw/exec";
 const weights = [125,133,141,149,157,165,174,184,197,285];
 let activeWeight = 125;
-let currentWeek = 0;
 
-// ── WEEK INFO ──────────────────────────────────────────────────
 async function fetchWeekInfo() {
   try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=week`);
     const data = await res.json();
-    currentWeek = data.week;
-    document.getElementById('weekLabel').textContent = data.label.toUpperCase();
+    document.getElementById('weekLabel').textContent = (data.label || 'Off-Season').toUpperCase();
     document.getElementById('statWeek').textContent = data.week || '—';
   } catch(e) {}
 }
 
-// ── RANKINGS ───────────────────────────────────────────────────
 async function fetchRankings(weight) {
+  document.getElementById('panelWeight').innerHTML = `${weight} <span>LBS</span>`;
+  document.getElementById('panelBallotCount').textContent = '';
   document.getElementById('tableContainer').innerHTML =
-    `<div class="table-loading"><span class="spinner"></span>Loading rankings...</div>`;
-  document.getElementById('weightLabel').innerHTML =
-    `${weight} <span>LBS — COMMUNITY RANKINGS</span>`;
-
+    `<div class="state-box"><p><span class="spinner"></span>Loading rankings...</p></div>`;
   try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=results&weight=${weight}`);
     const data = await res.json();
     renderTable(data);
   } catch(e) {
     document.getElementById('tableContainer').innerHTML =
-      `<div class="empty-state"><p>Could not load rankings.</p></div>`;
+      `<div class="state-box"><p>Could not load rankings — check connection.</p></div>`;
   }
 }
 
 function renderTable(data) {
-  const container = document.getElementById('tableContainer');
-
-  // Update ballot count stat
   if (data.totalBallots !== undefined) {
     document.getElementById('statBallots').textContent = data.totalBallots || '0';
+    document.getElementById('panelBallotCount').textContent =
+      data.totalBallots
+        ? `${data.totalBallots} ballot${data.totalBallots !== 1 ? 's' : ''} · ${data.weekLabel || 'Off-Season'}`
+        : '';
   }
 
   if (!data.results || !data.results.length) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <p>No votes yet for this weight class.</p>
-        <a href="poll.html" class="btn-vote">Be the first to vote →</a>
+    document.getElementById('tableContainer').innerHTML = `
+      <div class="state-box">
+        <p>No votes yet for this weight class — be the first!</p>
+        <a href="poll.html" class="btn-vote">Cast Your Vote →</a>
       </div>`;
     return;
   }
 
-  container.innerHTML = `
+  const maxPts = data.results[0]?.points || 1;
+  const medals = ['🥇','🥈','🥉'];
+
+  document.getElementById('tableContainer').innerHTML = `
     <table>
       <thead>
         <tr>
           <th>#</th>
           <th>Wrestler</th>
-          <th class="center">POINTS</th>
+          <th>School</th>
+          <th class="right" style="padding-right:1rem;">Votes</th>
+          <th class="bar-cell" style="width:120px;"></th>
         </tr>
       </thead>
       <tbody>
         ${data.results.map((r, i) => `
           <tr>
-            <td><span class="rank-num">${r.rank}</span></td>
+            <td>
+              <div class="rank-num">${r.rank}</div>
+              ${i < 3 ? `<span class="rank-medal">${medals[i]}</span>` : ''}
+            </td>
             <td>
               <div class="wrestler-name">${r.name}</div>
             </td>
-            <td><span class="consensus-score">${r.points}</span></td>
+            <td>
+              <div class="wrestler-school">${r.school || '—'}</div>
+            </td>
+            <td class="right">
+              <div class="points-col">${r.points}</div>
+              <span class="points-label">PTS</span>
+            </td>
+            <td class="bar-cell">
+              <div class="bar-track">
+                <div class="bar-fill" style="width:${Math.round((r.points/maxPts)*100)}%"></div>
+              </div>
+            </td>
           </tr>`).join('')}
       </tbody>
-    </table>
-    <div style="margin-top:0.8rem;font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);">
-      Based on ${data.totalBallots} ballot${data.totalBallots !== 1 ? 's' : ''} · ${data.weekLabel || 'Off-Season'}
-    </div>`;
+    </table>`;
 }
 
-// ── WEIGHT TABS ────────────────────────────────────────────────
 function renderWeightTabs() {
   document.getElementById('weightTabs').innerHTML = weights.map(w =>
-    `<button class="weight-btn ${w === activeWeight ? 'active' : ''}" onclick="setWeight(${w})">${w}</button>`
+    `<button class="weight-btn ${w === activeWeight ? 'active' : ''}" onclick="setWeight(${w})">${w} lbs</button>`
   ).join('');
 }
 
@@ -279,7 +588,6 @@ function setWeight(w) {
   fetchRankings(w);
 }
 
-// ── INIT ───────────────────────────────────────────────────────
 (async () => {
   await fetchWeekInfo();
   renderWeightTabs();
