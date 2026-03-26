@@ -7,18 +7,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #0d0d0d;
-      --surface: #141414;
-      --surface2: #1a1a1a;
-      --border: #242424;
-      --gold: #d4a843;
-      --gold-dim: #7a6130;
-      --gold-glow: rgba(212,168,67,0.15);
-      --red: #c0392b;
-      --green: #27ae60;
-      --text: #efefef;
-      --muted: #5a5a5a;
-      --muted2: #888;
+      --bg: #0d0d0d; --surface: #141414; --surface2: #1a1a1a;
+      --border: #242424; --gold: #d4a843; --gold-dim: #7a6130;
+      --gold-glow: rgba(212,168,67,0.15); --red: #c0392b; --green: #27ae60;
+      --text: #efefef; --muted: #5a5a5a; --muted2: #888;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; }
@@ -63,22 +55,68 @@
     .ballot-weight { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--gold); letter-spacing: 0.05em; line-height: 1; }
     .ballot-weight span { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; margin-left: 4px; }
     .ballot-instruction { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em; }
+
+    /* SLOTS */
     .slots { padding: 1.2rem 1.4rem; display: flex; flex-direction: column; gap: 10px; }
-    .slot { display: flex; align-items: flex-start; gap: 10px; }
-    .slot-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--muted); width: 28px; text-align: center; flex-shrink: 0; padding-top: 6px; }
+    .slot { display: flex; align-items: center; gap: 10px; }
+    .slot-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--muted); width: 28px; text-align: center; flex-shrink: 0; }
     .slot:nth-child(1) .slot-num { color: var(--gold); }
     .slot:nth-child(2) .slot-num { color: #a0a0a0; }
     .slot:nth-child(3) .slot-num { color: #8b6340; }
-    .slot-input-wrap { flex: 1; position: relative; }
-    .slot-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 600; padding: 10px 14px; border-radius: 3px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
-    .slot-input:focus { border-color: var(--gold-dim); box-shadow: 0 0 0 3px var(--gold-glow); }
-    .slot-input.filled { border-color: rgba(212,168,67,0.3); }
-    .slot-input[readonly] { opacity: 0.7; cursor: default; }
-    .slot-school { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); margin-top: 3px; padding-left: 14px; min-height: 14px; }
-    .autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; background: #1e1e1e; border: 1px solid var(--gold-dim); border-top: none; border-radius: 0 0 3px 3px; z-index: 20; max-height: 200px; overflow-y: auto; }
-    .autocomplete-list li { padding: 8px 14px; font-size: 0.82rem; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; transition: background 0.1s; }
-    .autocomplete-list li:hover, .autocomplete-list li.highlighted { background: rgba(212,168,67,0.1); }
-    .autocomplete-list li .ac-school { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--muted); }
+
+    /* NATIVE SELECT STYLING */
+    .slot-select {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a5a5a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+    }
+    .slot-select:focus {
+      border-color: var(--gold-dim);
+      box-shadow: 0 0 0 3px var(--gold-glow);
+    }
+    .slot-select.filled {
+      border-color: rgba(212,168,67,0.3);
+      color: var(--text);
+    }
+    .slot-select option {
+      background: #1e1e1e;
+      color: var(--text);
+      font-family: sans-serif;
+    }
+    .slot-select option:disabled {
+      color: var(--muted);
+    }
+    .slot-select[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* LOADING STATE */
+    .slots-loading {
+      padding: 1.5rem 1.4rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
     .ballot-footer { padding: 1rem 1.4rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
     .slots-filled-msg { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); }
     .slots-filled-msg strong { color: var(--text); }
@@ -156,10 +194,12 @@
         <div class="ballot-header">
           <div>
             <div class="ballot-weight" id="ballotWeightLabel">125 <span>LBS</span></div>
-            <div class="ballot-instruction">TYPE A NAME · RANK YOUR TOP 8</div>
+            <div class="ballot-instruction">SELECT YOUR TOP 8 · #1 IS YOUR PICK FOR BEST</div>
           </div>
         </div>
-        <div class="slots" id="slotsContainer"></div>
+        <div id="slotsContainer">
+          <div class="slots-loading"><span class="spinner"></span>Loading wrestlers...</div>
+        </div>
         <div class="ballot-footer">
           <div class="slots-filled-msg"><strong id="filledCount">0</strong> / 8 wrestlers ranked</div>
           <button class="btn-submit" id="submitBtn" onclick="submitBallot()" disabled>Submit Ballot</button>
@@ -183,7 +223,6 @@
       </div>
       <div class="progress-pct" id="progressPct">0 of 10 weight classes voted</div>
     </div>
-
     <div class="side-card">
       <div class="side-title">
         Live Results
@@ -194,7 +233,6 @@
       </div>
       <div style="margin-top:0.8rem;font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted);" id="resultsBallotCount"></div>
     </div>
-
     <div class="side-card">
       <div class="side-title">Poll Stats</div>
       <div class="stats-grid">
@@ -211,32 +249,37 @@
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwOcV8gYNnkRoO9wMstvv5E5td01mUX8dGS0X3kLAsO5a7LvE_8n9Djd1kYxoW1ZQLkYw/exec";
 const weights = [125,133,141,149,157,165,174,184,197,285];
 
-let wrestlerDB = []; // loaded from Google Sheet
-
-async function fetchWrestlers() {
-  try {
-    const res = await fetch(`${APPS_SCRIPT_URL}?action=wrestlers`);
-    const data = await res.json();
-    if (data.wrestlers && data.wrestlers.length) {
-      wrestlerDB = data.wrestlers;
-    }
-  } catch(e) {
-    console.warn('Could not load wrestlers from Sheet:', e);
-  }
-}
+// Loaded live from Google Sheet
+let wrestlerDB = [];
 
 let activeWeight = 125;
-let picks = {};
-let submitted = {};
+let picks = {};       // { weight: [name x8] }
+let submitted = {};   // { weight: true }
 let currentWeek = 0;
 let weekLabel = "Off-Season";
 
+// ── STATUS ─────────────────────────────────────────────────────
 function showStatus(msg, type='loading') {
   const el = document.getElementById('statusMsg');
   el.textContent = msg; el.className = `status-msg visible ${type}`;
 }
 function hideStatus() { document.getElementById('statusMsg').className = 'status-msg'; }
 
+// ── FETCH WRESTLERS FROM SHEET ─────────────────────────────────
+async function fetchWrestlers() {
+  try {
+    const res = await fetch(`${APPS_SCRIPT_URL}?action=wrestlers`);
+    const data = await res.json();
+    if (data.wrestlers && data.wrestlers.length) {
+      // Sort alphabetically within each weight
+      wrestlerDB = data.wrestlers.sort((a, b) => a.name.localeCompare(b.name));
+    }
+  } catch(e) {
+    console.warn('Could not load wrestlers from Sheet:', e);
+  }
+}
+
+// ── FETCH WEEK INFO ────────────────────────────────────────────
 async function fetchWeekInfo() {
   try {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=week`);
@@ -249,6 +292,7 @@ async function fetchWeekInfo() {
   }
 }
 
+// ── FETCH LIVE RESULTS ─────────────────────────────────────────
 async function fetchResults(weight) {
   document.getElementById('resultsList').innerHTML = `<div class="results-loading"><span class="spinner"></span>Loading...</div>`;
   document.getElementById('resultsBallotCount').textContent = '';
@@ -282,101 +326,69 @@ function renderResultsSidebar(data) {
     `Based on ${data.totalBallots} ballot${data.totalBallots !== 1 ? 's' : ''} · ${data.weekLabel || weekLabel}`;
 }
 
-function getOtherPicks(slotIdx) {
-  return (picks[activeWeight] || []).filter((v, i) => i !== slotIdx && v);
+// ── BUILD DROPDOWN OPTIONS FOR A WEIGHT ───────────────────────
+function buildOptions(weight, excludeNames = [], selectedName = '') {
+  const roster = wrestlerDB
+    .filter(w => w.weight === weight)
+    .filter(w => !excludeNames.includes(w.name) || w.name === selectedName);
+
+  const blankOption = `<option value="" disabled ${!selectedName ? 'selected' : ''}>— Select wrestler —</option>`;
+  const options = roster.map(w =>
+    `<option value="${w.name}" ${w.name === selectedName ? 'selected' : ''}>${w.name} · ${w.school}</option>`
+  ).join('');
+
+  return blankOption + options;
 }
 
-function search(query, slotIdx) {
-  if (!query) return [];
-  const q = query.toLowerCase();
-  const others = getOtherPicks(slotIdx);
-  return wrestlerDB
-    .filter(w => w.weight === activeWeight && !others.includes(w.name))
-    .filter(w => w.name.toLowerCase().includes(q) || w.school.toLowerCase().includes(q))
-    .slice(0, 6);
-}
-
-function renderAutocomplete(slotIdx, results) {
-  const wrap = document.getElementById(`slot-wrap-${slotIdx}`);
-  let list = wrap.querySelector('.autocomplete-list');
-  if (!results.length) { if (list) list.remove(); return; }
-  if (!list) { list = document.createElement('ul'); list.className = 'autocomplete-list'; wrap.appendChild(list); }
-  list.innerHTML = results.map((w,i) =>
-    `<li data-name="${w.name}" data-school="${w.school}" class="${i===0?'highlighted':''}">
-      <span>${w.name}</span><span class="ac-school">${w.school}</span></li>`).join('');
-  list.querySelectorAll('li').forEach(li => {
-    li.addEventListener('mousedown', e => { e.preventDefault(); selectWrestler(slotIdx, li.dataset.name, li.dataset.school); });
-  });
-}
-
-function clearAutocomplete(slotIdx) {
-  document.getElementById(`slot-wrap-${slotIdx}`)?.querySelector('.autocomplete-list')?.remove();
-}
-
-function selectWrestler(slotIdx, name, school) {
-  if (!picks[activeWeight]) picks[activeWeight] = Array(8).fill('');
-  picks[activeWeight][slotIdx] = name;
-  clearAutocomplete(slotIdx);
-  renderSlots(); updateFooter();
-}
-
+// ── RENDER SLOTS AS DROPDOWNS ──────────────────────────────────
 function renderSlots() {
+  const container = document.getElementById('slotsContainer');
   const currentPicks = picks[activeWeight] || Array(8).fill('');
   const isSubmitted = submitted[activeWeight];
-  document.getElementById('slotsContainer').innerHTML = Array.from({length:8},(_,i) => {
-    const val = currentPicks[i] || '';
-    const wrestler = wrestlerDB.find(w => w.name === val && w.weight === activeWeight);
-    const school = wrestler ? wrestler.school : (val ? '(custom entry)' : '');
-    return `<div class="slot">
-      <div class="slot-num">${i+1}</div>
-      <div class="slot-input-wrap" id="slot-wrap-${i}">
-        <input class="slot-input ${val?'filled':''}" id="slot-input-${i}" type="text"
-          placeholder="Search wrestler..." value="${val}" autocomplete="off"
-          ${isSubmitted?'readonly':''}
-          oninput="onSlotInput(${i},this.value)"
-          onblur="onSlotBlur(${i})"
-          onkeydown="onSlotKey(event,${i})"/>
-        <div class="slot-school" id="slot-school-${i}">${school}</div>
-      </div></div>`;
-  }).join('');
-}
 
-function onSlotInput(slotIdx, value) {
-  if (!picks[activeWeight]) picks[activeWeight] = Array(8).fill('');
-  picks[activeWeight][slotIdx] = '';
-  updateFooter();
-  renderAutocomplete(slotIdx, search(value, slotIdx));
-  document.getElementById(`slot-school-${slotIdx}`).textContent = '';
-}
-
-function onSlotBlur(slotIdx) {
-  const val = document.getElementById(`slot-input-${slotIdx}`)?.value?.trim();
-  if (val) {
-    const match = wrestlerDB.find(w => w.weight === activeWeight && w.name.toLowerCase() === val.toLowerCase());
-    if (match) selectWrestler(slotIdx, match.name, match.school);
+  if (!wrestlerDB.length) {
+    container.innerHTML = `<div class="slots-loading"><span class="spinner"></span>Loading wrestlers...</div>`;
+    return;
   }
-  setTimeout(() => clearAutocomplete(slotIdx), 150);
+
+  container.innerHTML = `<div class="slots">${
+    Array.from({length: 8}, (_, i) => {
+      const val = currentPicks[i] || '';
+      // Exclude names already picked in OTHER slots
+      const others = currentPicks.filter((v, idx) => idx !== i && v);
+      return `
+        <div class="slot">
+          <div class="slot-num">${i + 1}</div>
+          <select
+            class="slot-select ${val ? 'filled' : ''}"
+            id="slot-select-${i}"
+            ${isSubmitted ? 'disabled' : ''}
+            onchange="onSlotChange(${i}, this.value)"
+          >${buildOptions(activeWeight, others, val)}</select>
+        </div>`;
+    }).join('')
+  }</div>`;
 }
 
-function onSlotKey(e, slotIdx) {
-  const list = document.querySelector(`#slot-wrap-${slotIdx} .autocomplete-list`);
-  if (!list) return;
-  const items = list.querySelectorAll('li');
-  const highlighted = list.querySelector('.highlighted');
-  if (e.key==='ArrowDown') { e.preventDefault(); const next=highlighted?.nextElementSibling||items[0]; highlighted?.classList.remove('highlighted'); next?.classList.add('highlighted'); }
-  else if (e.key==='ArrowUp') { e.preventDefault(); const prev=highlighted?.previousElementSibling||items[items.length-1]; highlighted?.classList.remove('highlighted'); prev?.classList.add('highlighted'); }
-  else if (e.key==='Enter'&&highlighted) { e.preventDefault(); selectWrestler(slotIdx,highlighted.dataset.name,highlighted.dataset.school); }
-  else if (e.key==='Escape') clearAutocomplete(slotIdx);
+// ── SLOT CHANGE HANDLER ────────────────────────────────────────
+function onSlotChange(slotIdx, value) {
+  if (!picks[activeWeight]) picks[activeWeight] = Array(8).fill('');
+  picks[activeWeight][slotIdx] = value;
+  // Re-render so other dropdowns exclude this pick
+  renderSlots();
+  updateFooter();
 }
 
+// ── FOOTER ─────────────────────────────────────────────────────
 function updateFooter() {
-  const filled = (picks[activeWeight]||[]).filter(Boolean).length;
+  const filled = (picks[activeWeight] || []).filter(Boolean).length;
   document.getElementById('filledCount').textContent = filled;
   document.getElementById('submitBtn').disabled = filled < 1;
 }
 
+// ── SUBMIT ─────────────────────────────────────────────────────
 async function submitBallot() {
-  const validPicks = (picks[activeWeight]||[]).filter(Boolean);
+  const validPicks = (picks[activeWeight] || []).filter(Boolean);
   if (!validPicks.length) return;
   const btn = document.getElementById('submitBtn');
   btn.disabled = true; btn.textContent = 'Submitting...';
@@ -392,11 +404,12 @@ async function submitBallot() {
       hideStatus();
       document.getElementById('votingState').style.display = 'none';
       document.getElementById('successState').classList.add('visible');
-      document.getElementById('successMsg').textContent = `Your ${activeWeight} lbs ballot is live on the scoreboard.`;
+      document.getElementById('successMsg').textContent =
+        `Your ${activeWeight} lbs ballot is live on the scoreboard.`;
       renderWeightSelector(); renderProgress(); renderStats();
       fetchResults(activeWeight);
     } else {
-      showStatus(`Error: ${data.error||'Submission failed'}`, 'error');
+      showStatus(`Error: ${data.error || 'Submission failed'}`, 'error');
       btn.disabled = false; btn.textContent = 'Submit Ballot';
     }
   } catch(e) {
@@ -412,6 +425,7 @@ function editBallot() {
   renderSlots(); updateFooter();
 }
 
+// ── WEIGHT SWITCHING ───────────────────────────────────────────
 function setWeight(w) {
   activeWeight = w;
   renderWeightSelector(); renderBallotCard(); fetchResults(w);
@@ -423,7 +437,8 @@ function renderBallotCard() {
   if (isSubmitted) {
     document.getElementById('votingState').style.display = 'none';
     document.getElementById('successState').classList.add('visible');
-    document.getElementById('successMsg').textContent = `Your ${activeWeight} lbs ballot is live on the scoreboard.`;
+    document.getElementById('successMsg').textContent =
+      `Your ${activeWeight} lbs ballot is live on the scoreboard.`;
   } else {
     document.getElementById('votingState').style.display = '';
     document.getElementById('successState').classList.remove('visible');
@@ -431,21 +446,23 @@ function renderBallotCard() {
   }
 }
 
+// ── SIDEBAR ────────────────────────────────────────────────────
 function renderWeightSelector() {
   document.getElementById('weightSelector').innerHTML = weights.map(w =>
-    `<button class="wt-btn ${w===activeWeight?'active':''} ${submitted[w]&&w!==activeWeight?'done':''}" onclick="setWeight(${w})">${w}</button>`
+    `<button class="wt-btn ${w === activeWeight ? 'active' : ''} ${submitted[w] && w !== activeWeight ? 'done' : ''}"
+      onclick="setWeight(${w})">${w}</button>`
   ).join('');
 }
 
 function renderProgress() {
   const done = weights.filter(w => submitted[w]);
-  const pct = Math.round((done.length/weights.length)*100);
-  document.getElementById('progressFill').style.width = pct+'%';
+  const pct = Math.round((done.length / weights.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressPct').textContent = `${done.length} of ${weights.length} weight classes voted`;
   document.getElementById('progressList').innerHTML = weights.map(w =>
-    `<div class="progress-item ${submitted[w]?'done':''}">
+    `<div class="progress-item ${submitted[w] ? 'done' : ''}">
       <span class="wt">${w} lbs</span>
-      <span class="status">${submitted[w]?'✓ Voted':'—'}</span>
+      <span class="status">${submitted[w] ? '✓ Voted' : '—'}</span>
     </div>`).join('');
 }
 
@@ -456,8 +473,11 @@ function renderStats() {
   document.getElementById('statRemaining').textContent = weights.length - done;
 }
 
+// ── INIT ───────────────────────────────────────────────────────
 (async () => {
+  showStatus('Loading wrestlers and week info...', 'loading');
   await Promise.all([fetchWeekInfo(), fetchWrestlers()]);
+  hideStatus();
   renderWeightSelector(); renderBallotCard(); renderProgress(); renderStats();
   fetchResults(activeWeight);
 })();
