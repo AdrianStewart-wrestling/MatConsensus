@@ -33,17 +33,19 @@
     }
 
     header {
-      background: var(--accent2);
+      background: #ffffff;
+      border-bottom: 2px solid var(--border);
       padding: 0 2rem;
       display: flex; align-items: center; justify-content: space-between;
       height: 64px;
       position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
     }
 
     .logo {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 1.5rem; font-weight: 800;
-      letter-spacing: 0.06em; color: #fff;
+      letter-spacing: 0.06em; color: var(--accent2);
       text-transform: uppercase;
     }
     .logo em { color: var(--accent); font-style: normal; }
@@ -52,23 +54,23 @@
     .nav-links a {
       font-family: 'DM Mono', monospace;
       font-size: 0.65rem; letter-spacing: 0.12em;
-      text-transform: uppercase; color: rgba(255,255,255,0.5);
+      text-transform: uppercase; color: var(--muted);
       text-decoration: none; transition: color 0.15s;
     }
-    .nav-links a:hover { color: #fff; }
+    .nav-links a:hover { color: var(--text); }
     .nav-links a.active { color: var(--accent); }
 
     .header-right { display: flex; align-items: center; gap: 1rem; }
 
     .header-meta {
       font-family: 'DM Mono', monospace;
-      font-size: 0.62rem; color: rgba(255,255,255,0.35);
+      font-size: 0.62rem; color: var(--muted);
       letter-spacing: 0.08em; text-align: right; line-height: 1.7;
     }
 
     .partnership-badge {
       display: flex; align-items: center; gap: 10px;
-      border-left: 1px solid rgba(255,255,255,0.12);
+      border-left: 1px solid var(--border);
       padding-left: 1rem;
     }
     .partnership-badge img {
@@ -78,7 +80,7 @@
     .partnership-text {
       font-family: 'DM Mono', monospace;
       font-size: 0.55rem; letter-spacing: 0.1em;
-      color: rgba(255,255,255,0.4);
+      color: var(--muted);
       text-transform: uppercase; line-height: 1.6;
     }
     .partnership-text strong {
