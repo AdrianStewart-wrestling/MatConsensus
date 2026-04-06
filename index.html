@@ -549,7 +549,7 @@ async function fetchWeekInfo() {
     const res = await fetch(`${APPS_SCRIPT_URL}?action=week`);
     const data = await res.json();
     document.getElementById('weekLabel').textContent = (data.label || 'Off-Season').toUpperCase();
-    document.getElementById('statWeek').textContent = data.week || '&mdash;';
+    document.getElementById('statWeek').textContent = data.week || '—';
   } catch(e) {}
 }
 
