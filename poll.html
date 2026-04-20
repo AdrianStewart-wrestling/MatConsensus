@@ -12,6 +12,7 @@
       --accent: #c0392b; --accent-dim: rgba(192,57,43,0.08);
       --accent2: #1a1a2e; --text: #1c1c1c; --muted: #888880; --muted2: #b0aea6;
       --gold: #c9a84c; --green: #2e7d52; --cactus-green: #3a9e2e;
+      --p4p: #6b2fb5; --teams: #0e6ba8;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: var(--bg); color: var(--text); font-family: 'Lato', sans-serif; min-height: 100vh; }
@@ -67,21 +68,33 @@
 
     .layout { max-width: 1000px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 1fr 270px; gap: 2rem; }
 
-    .weight-selector { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 1.2rem; }
+    .weight-selector { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 1.2rem; align-items: center; }
     .wt-btn { font-family: 'Barlow Condensed', sans-serif; font-size: 0.95rem; font-weight: 700; padding: 5px 12px; border: 1px solid var(--border-dark); background: var(--surface); color: var(--muted); cursor: pointer; border-radius: 2px; transition: all 0.13s; letter-spacing: 0.04em; }
     .wt-btn:hover { border-color: var(--accent2); color: var(--text); }
     .wt-btn.done { border-color: var(--green); color: var(--green); background: rgba(46,125,82,0.06); }
     .wt-btn.active { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+    .wt-divider { width: 1px; height: 22px; background: var(--border-dark); margin: 0 6px; }
+    .wt-btn.special { padding: 5px 14px; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.85rem; }
+    .wt-btn.special.p4p { border-color: var(--p4p); color: var(--p4p); }
+    .wt-btn.special.p4p:hover { background: rgba(107,47,181,0.08); }
+    .wt-btn.special.p4p.active { background: var(--p4p); border-color: var(--p4p); color: #fff; }
+    .wt-btn.special.p4p.done:not(.active) { border-color: var(--green); color: var(--green); background: rgba(46,125,82,0.06); }
+    .wt-btn.special.teams { border-color: var(--teams); color: var(--teams); }
+    .wt-btn.special.teams:hover { background: rgba(14,107,168,0.08); }
+    .wt-btn.special.teams.active { background: var(--teams); border-color: var(--teams); color: #fff; }
+    .wt-btn.special.teams.done:not(.active) { border-color: var(--green); color: var(--green); background: rgba(46,125,82,0.06); }
 
     .ballot-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-    .ballot-header { padding: 1.2rem 1.4rem; border-bottom: 2px solid var(--accent2); display: flex; align-items: baseline; justify-content: space-between; background: var(--accent2); }
+    .ballot-header { padding: 1.2rem 1.4rem; border-bottom: 2px solid var(--accent2); display: flex; align-items: baseline; justify-content: space-between; background: var(--accent2); transition: background 0.2s, border-color 0.2s; }
+    .ballot-header.p4p-header { background: var(--p4p); border-bottom-color: var(--p4p); }
+    .ballot-header.teams-header { background: var(--teams); border-bottom-color: var(--teams); }
     .ballot-weight { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800; color: #fff; letter-spacing: 0.03em; text-transform: uppercase; }
     .ballot-weight span { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.45); margin-left: 6px; letter-spacing: 0.1em; }
     .ballot-instruction { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: rgba(255,255,255,0.45); letter-spacing: 0.1em; }
 
-    .slots { padding: 1.2rem 1.4rem; display: flex; flex-direction: column; gap: 8px; }
+    .slots { padding: 1.2rem 1.4rem; display: flex; flex-direction: column; gap: 8px; max-height: 560px; overflow-y: auto; }
     .slot { display: flex; align-items: center; gap: 10px; }
-    .slot-num { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--muted2); width: 26px; text-align: center; flex-shrink: 0; }
+    .slot-num { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--muted2); width: 30px; text-align: center; flex-shrink: 0; }
     .slot:nth-child(1) .slot-num { color: var(--gold); }
     .slot:nth-child(2) .slot-num { color: #888; }
     .slot:nth-child(3) .slot-num { color: #a0845c; }
@@ -124,7 +137,6 @@
     .side-title { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.8rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: baseline; }
     .side-title-weight { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--accent); }
 
-    /* CACTUS PARTNER CARD */
     .cactus-partner-card { border: 1px solid var(--border); border-top: 3px solid var(--cactus-green); padding: 1rem; display: flex; align-items: center; gap: 12px; border-radius: 0 0 4px 4px; }
     .cactus-partner-card img { height: 60px; width: auto; flex-shrink: 0; filter: drop-shadow(1px 1px 0 rgba(0,0,0,0.06)); }
     .cactus-partner-info strong { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cactus-green); display: block; margin-bottom: 3px; }
@@ -136,18 +148,19 @@
     .progress-item .status { color: var(--muted2); }
     .progress-item.done .wt { color: var(--text); font-weight: 700; }
     .progress-item.done .status { color: var(--green); }
+    .progress-item.special .wt { letter-spacing: 0.08em; }
     .progress-bar-wrap { margin-top: 0.8rem; background: var(--surface2); border-radius: 2px; height: 5px; overflow: hidden; }
     .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s ease; }
     .progress-pct { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--muted); margin-top: 4px; text-align: right; }
 
-    .results-list { display: flex; flex-direction: column; gap: 8px; }
+    .results-list { display: flex; flex-direction: column; gap: 8px; max-height: 360px; overflow-y: auto; }
     .result-row { display: flex; align-items: center; gap: 8px; }
-    .result-rank { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; color: var(--muted2); width: 20px; text-align: center; flex-shrink: 0; }
+    .result-rank { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; color: var(--muted2); width: 22px; text-align: center; flex-shrink: 0; }
     .result-row:nth-child(1) .result-rank { color: var(--gold); }
     .result-row:nth-child(2) .result-rank { color: #888; }
     .result-row:nth-child(3) .result-rank { color: #a0845c; }
-    .result-bar-wrap { flex: 1; }
-    .result-name { font-size: 0.78rem; font-weight: 700; margin-bottom: 3px; color: var(--text); }
+    .result-bar-wrap { flex: 1; min-width: 0; }
+    .result-name { font-size: 0.78rem; font-weight: 700; margin-bottom: 3px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .result-bar { height: 3px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
     .result-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.5s ease; }
     .result-row:nth-child(1) .result-bar-fill { background: var(--gold); }
@@ -211,7 +224,7 @@
       <h1>Cast Your<br/><span class="line2">Ballot</span></h1>
     </div>
     <div class="masthead-meta">
-      <p>Rank your top 8 wrestlers at each weight class. Your votes directly shape the community rankings — no algorithm, no bias.</p>
+      <p>Rank your top wrestlers at each weight class, plus Pound-for-Pound and Team rankings. Your votes directly shape the community rankings — no algorithm, no bias.</p>
       <div class="week-badge" id="weekBadge">&#128197; Loading...</div>
       <div style="margin-top:6px;"><span class="partner-tag">Cactus Wrestling</span></div>
     </div>
@@ -227,17 +240,17 @@
     <div class="weight-selector" id="weightSelector"></div>
     <div class="ballot-card">
       <div id="votingState">
-        <div class="ballot-header">
+        <div class="ballot-header" id="ballotHeader">
           <div>
             <div class="ballot-weight" id="ballotWeightLabel">125 <span>LBS</span></div>
-            <div class="ballot-instruction">SELECT YOUR TOP 8 &middot; #1 IS YOUR PICK FOR BEST</div>
+            <div class="ballot-instruction" id="ballotInstruction">SELECT YOUR TOP 8 &middot; #1 IS YOUR PICK FOR BEST</div>
           </div>
         </div>
         <div id="slotsContainer">
           <div class="slots-loading"><span class="spinner"></span>Loading wrestlers...</div>
         </div>
         <div class="ballot-footer">
-          <div class="slots-filled-msg"><strong id="filledCount">0</strong> / 8 wrestlers ranked</div>
+          <div class="slots-filled-msg"><strong id="filledCount">0</strong> / <span id="slotTotal">8</span> <span id="slotLabel">wrestlers</span> ranked</div>
           <button class="btn-submit" id="submitBtn" onclick="submitBallot()" disabled>Submit Ballot</button>
         </div>
       </div>
@@ -269,7 +282,7 @@
       <div class="progress-bar-wrap">
         <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
       </div>
-      <div class="progress-pct" id="progressPct">0 of 10 weight classes voted</div>
+      <div class="progress-pct" id="progressPct">0 of 12 ballots submitted</div>
     </div>
 
     <div class="side-card">
@@ -287,9 +300,9 @@
       <div class="side-title">Poll Stats</div>
       <div class="stats-grid">
         <div class="stat-box"><div class="stat-num" id="statMyBallots">0</div><div class="stat-label">MY BALLOTS</div></div>
-        <div class="stat-box"><div class="stat-num" id="statWeightsDone">0</div><div class="stat-label">WEIGHTS DONE</div></div>
+        <div class="stat-box"><div class="stat-num" id="statWeightsDone">0</div><div class="stat-label">BALLOTS DONE</div></div>
         <div class="stat-box"><div class="stat-num" id="statWeek">&mdash;</div><div class="stat-label">CURRENT WEEK</div></div>
-        <div class="stat-box"><div class="stat-num" id="statRemaining">10</div><div class="stat-label">REMAINING</div></div>
+        <div class="stat-box"><div class="stat-num" id="statRemaining">12</div><div class="stat-label">REMAINING</div></div>
       </div>
     </div>
   </aside>
@@ -332,11 +345,52 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// ===== Ballot types =====
+// Weight classes are numbers. P4P and Teams are string keys.
 const weights = [125,133,141,149,157,165,174,184,197,285];
-const rankPoints = [8,7,6,5,4,3,2,1];
+const P4P_KEY = 'p4p';
+const TEAMS_KEY = 'teams';
+const allBallots = [...weights, P4P_KEY, TEAMS_KEY];
+
+// Slot counts per ballot type
+function slotsFor(ballotKey) {
+  if (ballotKey === P4P_KEY) return 10;
+  if (ballotKey === TEAMS_KEY) return 25;
+  return 8;
+}
+
+// Points per rank — longer ballots need longer arrays
+function rankPointsFor(ballotKey) {
+  const n = slotsFor(ballotKey);
+  // Linear descending: top slot gets `n` points, last gets 1.
+  return Array.from({ length: n }, (_, i) => n - i);
+}
+
+// Nice label for a ballot key
+function labelFor(ballotKey) {
+  if (ballotKey === P4P_KEY) return 'P4P';
+  if (ballotKey === TEAMS_KEY) return 'TEAMS';
+  return `${ballotKey} LBS`;
+}
+
+// Storage id for Firestore doc under rankings/{weekId}/weights/{id}
+function weightDocId(ballotKey) {
+  if (ballotKey === P4P_KEY) return 'p4p';
+  if (ballotKey === TEAMS_KEY) return 'teams';
+  return String(ballotKey);
+}
+
+// The filter value stored on ballots — matches existing schema's `weight` field
+function weightFieldFor(ballotKey) {
+  if (ballotKey === P4P_KEY) return 'p4p';
+  if (ballotKey === TEAMS_KEY) return 'teams';
+  return Number(ballotKey);
+}
+
 let wrestlerDB = [];
-let activeWeight = 125;
-let picks = {};
+let teamsDB = []; // [{ name: 'Penn State', wrestlerCount: 10 }]
+let activeBallot = 125; // current selection (number for weights, string for p4p/teams)
+let picks = {}; // keyed by ballot key ("125", "p4p", "teams")
 let submitted = JSON.parse(localStorage.getItem('fanVoteSubmitted') || '{}');
 let weekLabel = "Off-Season";
 let currentWeekId = 'week-0';
@@ -378,6 +432,18 @@ async function fetchWrestlers() {
       .filter(w => w.active !== false)
       .map(w => ({ ...w, weight: Number(w.weight) }))
       .sort((a, b) => a.name.localeCompare(b.name));
+
+    // Derive teams from schools in the wrestlers collection
+    const teamMap = new Map();
+    wrestlerDB.forEach(w => {
+      const school = (w.school || '').trim();
+      if (!school) return;
+      const key = school.toLowerCase();
+      const existing = teamMap.get(key) || { name: school, wrestlerCount: 0 };
+      existing.wrestlerCount += 1;
+      teamMap.set(key, existing);
+    });
+    teamsDB = Array.from(teamMap.values()).sort((a, b) => a.name.localeCompare(b.name));
   } catch (e) {
     console.warn('Could not load wrestlers:', e);
   }
@@ -399,15 +465,16 @@ async function fetchWeekInfo() {
   }
 }
 
-function aggregateBallots(ballots) {
+function aggregateBallots(ballots, ballotKey) {
+  const rankPoints = rankPointsFor(ballotKey);
   const totals = new Map();
   ballots.forEach(ballot => {
     (ballot.picks || []).forEach((name, idx) => {
       if (!name) return;
       const key = normalizeName(name);
-      const existing = totals.get(key) || { name, school: schoolFor(name), points: 0 };
+      const existing = totals.get(key) || { name, school: ballotKey === TEAMS_KEY ? '' : schoolFor(name), points: 0 };
       existing.name = existing.name || name;
-      existing.school = existing.school || schoolFor(name);
+      if (ballotKey !== TEAMS_KEY) existing.school = existing.school || schoolFor(name);
       existing.points += rankPoints[idx] || 0;
       totals.set(key, existing);
     });
@@ -418,41 +485,42 @@ function aggregateBallots(ballots) {
     .map((row, idx) => ({ rank: idx + 1, name: row.name, school: row.school || '', points: row.points }));
 }
 
-async function computeResultsFromBallots(weight) {
+async function computeResultsFromBallots(ballotKey) {
+  const filterVal = weightFieldFor(ballotKey);
   const ballotsSnap = await getDocs(query(collection(db, 'ballots'), where('weekId', '==', currentWeekId)));
   const ballots = ballotsSnap.docs
     .map(d => d.data())
-    .filter(b => Number(b.weight) === Number(weight));
+    .filter(b => String(b.weight) === String(filterVal));
 
   return {
     totalBallots: ballots.length,
     weekLabel,
-    results: aggregateBallots(ballots)
+    results: aggregateBallots(ballots, ballotKey)
   };
 }
 
-async function fetchResults(weight) {
+async function fetchResults(ballotKey) {
   document.getElementById('resultsList').innerHTML = `<div class="results-loading"><span class="spinner"></span>Loading...</div>`;
   document.getElementById('resultsBallotCount').textContent = '';
 
   try {
-    const rankingsRef = doc(db, 'rankings', currentWeekId, 'weights', String(weight));
+    const rankingsRef = doc(db, 'rankings', currentWeekId, 'weights', weightDocId(ballotKey));
     const snap = await getDoc(rankingsRef);
     if (snap.exists()) {
-      renderResultsSidebar(snap.data());
+      renderResultsSidebar(snap.data(), ballotKey);
       return;
     }
 
-    const rebuilt = await computeResultsFromBallots(weight);
-    renderResultsSidebar(rebuilt);
+    const rebuilt = await computeResultsFromBallots(ballotKey);
+    renderResultsSidebar(rebuilt, ballotKey);
   } catch (e) {
     console.warn('Could not load results:', e);
     document.getElementById('resultsList').innerHTML = `<div class="no-votes">Could not load results.</div>`;
   }
 }
 
-function renderResultsSidebar(data) {
-  document.getElementById('resultsWeightLabel').textContent = `${activeWeight} LBS`;
+function renderResultsSidebar(data, ballotKey) {
+  document.getElementById('resultsWeightLabel').textContent = labelFor(ballotKey);
   const el = document.getElementById('resultsList');
   if (!data.results || !data.results.length) {
     el.innerHTML = `<div class="no-votes">No votes yet — be the first!</div>`;
@@ -461,11 +529,12 @@ function renderResultsSidebar(data) {
   }
 
   const maxPts = data.results[0]?.points || 1;
-  el.innerHTML = data.results.map(r => `
+  const topN = ballotKey === TEAMS_KEY ? 25 : (ballotKey === P4P_KEY ? 10 : 8);
+  el.innerHTML = data.results.slice(0, topN).map(r => `
     <div class="result-row">
       <div class="result-rank">${r.rank}</div>
       <div class="result-bar-wrap">
-        <div class="result-name">${r.name}</div>
+        <div class="result-name">${r.name}${r.school && ballotKey !== TEAMS_KEY ? ` <span style="font-weight:400;color:var(--muted);font-size:0.68rem;">${r.school}</span>` : ''}</div>
         <div class="result-bar"><div class="result-bar-fill" style="width:${Math.round((r.points/maxPts)*100)}%"></div></div>
       </div>
       <div class="result-votes">${r.points}pt</div>
@@ -476,10 +545,26 @@ function renderResultsSidebar(data) {
     `${totalBallots} ballot${totalBallots !== 1 ? 's' : ''} · ${data.weekLabel || weekLabel}`;
 }
 
-function buildOptions(weight, excludeNames = [], selectedName = '') {
-  const roster = wrestlerDB
-    .filter(w => Number(w.weight) === Number(weight))
-    .filter(w => !excludeNames.includes(w.name) || w.name === selectedName);
+// Build <option>s from the correct roster based on ballot type
+function buildOptions(ballotKey, excludeNames = [], selectedName = '') {
+  let roster;
+  if (ballotKey === TEAMS_KEY) {
+    roster = teamsDB
+      .filter(t => !excludeNames.includes(t.name) || t.name === selectedName);
+    const blank = `<option value="" disabled ${!selectedName ? 'selected' : ''}>— Select team —</option>`;
+    const opts = roster.map(t =>
+      `<option value="${t.name}" ${t.name === selectedName ? 'selected' : ''}>${t.name}</option>`
+    ).join('');
+    return blank + opts;
+  }
+  if (ballotKey === P4P_KEY) {
+    roster = wrestlerDB
+      .filter(w => !excludeNames.includes(w.name) || w.name === selectedName);
+  } else {
+    roster = wrestlerDB
+      .filter(w => Number(w.weight) === Number(ballotKey))
+      .filter(w => !excludeNames.includes(w.name) || w.name === selectedName);
+  }
   const blank = `<option value="" disabled ${!selectedName ? 'selected' : ''}>— Select wrestler —</option>`;
   const opts = roster.map(w =>
     `<option value="${w.name}" ${w.name === selectedName ? 'selected' : ''}>${w.name} · ${w.school}</option>`
@@ -489,14 +574,17 @@ function buildOptions(weight, excludeNames = [], selectedName = '') {
 
 function renderSlots() {
   const container = document.getElementById('slotsContainer');
-  const currentPicks = picks[activeWeight] || Array(8).fill('');
-  const isSubmitted = submitted[activeWeight];
-  if (!wrestlerDB.length) {
-    container.innerHTML = `<div class="slots-loading"><span class="spinner"></span>Loading wrestlers...</div>`;
+  const nSlots = slotsFor(activeBallot);
+  const currentPicks = picks[activeBallot] || Array(nSlots).fill('');
+  const isSubmitted = submitted[activeBallot];
+
+  // Guard: need wrestlers for everything; teams ballot also needs teamsDB populated
+  if (!wrestlerDB.length || (activeBallot === TEAMS_KEY && !teamsDB.length)) {
+    container.innerHTML = `<div class="slots-loading"><span class="spinner"></span>Loading ${activeBallot === TEAMS_KEY ? 'teams' : 'wrestlers'}...</div>`;
     return;
   }
   container.innerHTML = `<div class="slots">${
-    Array.from({length: 8}, (_, i) => {
+    Array.from({length: nSlots}, (_, i) => {
       const val = currentPicks[i] || '';
       const others = currentPicks.filter((v, idx) => idx !== i && v);
       return `<div class="slot">
@@ -504,27 +592,30 @@ function renderSlots() {
         <select class="slot-select ${val ? 'filled' : ''}" id="slot-select-${i}"
           ${isSubmitted ? 'disabled' : ''}
           onchange="window.onSlotChange(${i}, this.value)"
-        >${buildOptions(activeWeight, others, val)}</select>
+        >${buildOptions(activeBallot, others, val)}</select>
       </div>`;
     }).join('')
   }</div>`;
 }
 
 function onSlotChange(slotIdx, value) {
-  if (!picks[activeWeight]) picks[activeWeight] = Array(8).fill('');
-  picks[activeWeight][slotIdx] = value;
+  const nSlots = slotsFor(activeBallot);
+  if (!picks[activeBallot]) picks[activeBallot] = Array(nSlots).fill('');
+  picks[activeBallot][slotIdx] = value;
   renderSlots();
   updateFooter();
 }
 
 function updateFooter() {
-  const filled = (picks[activeWeight] || []).filter(Boolean).length;
+  const filled = (picks[activeBallot] || []).filter(Boolean).length;
   document.getElementById('filledCount').textContent = filled;
+  document.getElementById('slotTotal').textContent = slotsFor(activeBallot);
+  document.getElementById('slotLabel').textContent = activeBallot === TEAMS_KEY ? 'teams' : 'wrestlers';
   document.getElementById('submitBtn').disabled = filled < 1;
 }
 
 async function submitBallot() {
-  const validPicks = (picks[activeWeight] || []).filter(Boolean);
+  const validPicks = (picks[activeBallot] || []).filter(Boolean);
   if (!validPicks.length) return;
 
   const btn = document.getElementById('submitBtn');
@@ -532,25 +623,38 @@ async function submitBallot() {
   btn.textContent = 'Submitting...';
   showStatus('Sending your ballot...', 'loading');
 
-  const rankingsRef = doc(db, 'rankings', currentWeekId, 'weights', String(activeWeight));
+  const rankingsRef = doc(db, 'rankings', currentWeekId, 'weights', weightDocId(activeBallot));
   const ballotRef = doc(collection(db, 'ballots'));
+  const rankPoints = rankPointsFor(activeBallot);
+  const filterVal = weightFieldFor(activeBallot);
 
   try {
     await runTransaction(db, async (tx) => {
       const currentSnap = await tx.get(rankingsRef);
       const current = currentSnap.exists()
         ? currentSnap.data()
-        : { results: [], totalBallots: 0, weekId: currentWeekId, weekLabel, weight: activeWeight };
+        : { results: [], totalBallots: 0, weekId: currentWeekId, weekLabel, weight: filterVal };
 
       const scoreMap = new Map(
-        (current.results || []).map(row => [normalizeName(row.name), { ...row, points: Number(row.points || 0), school: row.school || schoolFor(row.name) }])
+        (current.results || []).map(row => [
+          normalizeName(row.name),
+          {
+            ...row,
+            points: Number(row.points || 0),
+            school: row.school || (activeBallot === TEAMS_KEY ? '' : schoolFor(row.name))
+          }
+        ])
       );
 
       validPicks.forEach((name, idx) => {
         const key = normalizeName(name);
-        const entry = scoreMap.get(key) || { name, school: schoolFor(name), points: 0 };
+        const entry = scoreMap.get(key) || {
+          name,
+          school: activeBallot === TEAMS_KEY ? '' : schoolFor(name),
+          points: 0
+        };
         entry.name = entry.name || name;
-        entry.school = entry.school || schoolFor(name);
+        if (activeBallot !== TEAMS_KEY) entry.school = entry.school || schoolFor(name);
         entry.points += rankPoints[idx] || 0;
         scoreMap.set(key, entry);
       });
@@ -564,7 +668,8 @@ async function submitBallot() {
         weekId: currentWeekId,
         weekLabel,
         weekNumber: currentWeekNumber,
-        weight: activeWeight,
+        weight: filterVal,
+        ballotType: activeBallot === P4P_KEY ? 'p4p' : activeBallot === TEAMS_KEY ? 'teams' : 'weight',
         picks: validPicks
       });
 
@@ -572,23 +677,24 @@ async function submitBallot() {
         weekId: currentWeekId,
         weekLabel,
         weekNumber: currentWeekNumber,
-        weight: activeWeight,
+        weight: filterVal,
+        ballotType: activeBallot === P4P_KEY ? 'p4p' : activeBallot === TEAMS_KEY ? 'teams' : 'weight',
         totalBallots: Number(current.totalBallots || 0) + 1,
         results,
         updatedAt: serverTimestamp()
       }, { merge: true });
     });
 
-    submitted[activeWeight] = true;
+    submitted[activeBallot] = true;
     persistSubmitted();
     hideStatus();
     document.getElementById('votingState').style.display = 'none';
     document.getElementById('successState').classList.add('visible');
-    document.getElementById('successMsg').textContent = `Your ${activeWeight} lbs ballot is live on the scoreboard.`;
+    document.getElementById('successMsg').textContent = `Your ${labelFor(activeBallot)} ballot is live on the scoreboard.`;
     renderWeightSelector();
     renderProgress();
     renderStats();
-    await fetchResults(activeWeight);
+    await fetchResults(activeBallot);
   } catch (e) {
     console.error(e);
     showStatus('Submission failed. Check Firestore rules and try again.', 'error');
@@ -602,7 +708,7 @@ async function submitBallot() {
 }
 
 function editBallot() {
-  submitted[activeWeight] = false;
+  submitted[activeBallot] = false;
   persistSubmitted();
   document.getElementById('votingState').style.display = '';
   document.getElementById('successState').classList.remove('visible');
@@ -610,20 +716,35 @@ function editBallot() {
   updateFooter();
 }
 
-function setWeight(w) {
-  activeWeight = w;
+function setBallot(b) {
+  activeBallot = b;
   renderWeightSelector();
   renderBallotCard();
-  fetchResults(w);
+  fetchResults(b);
 }
 
 function renderBallotCard() {
-  const isSubmitted = submitted[activeWeight];
-  document.getElementById('ballotWeightLabel').innerHTML = `${activeWeight} <span>LBS</span>`;
+  const isSubmitted = submitted[activeBallot];
+  const header = document.getElementById('ballotHeader');
+  header.classList.remove('p4p-header', 'teams-header');
+  if (activeBallot === P4P_KEY) header.classList.add('p4p-header');
+  if (activeBallot === TEAMS_KEY) header.classList.add('teams-header');
+
+  if (activeBallot === P4P_KEY) {
+    document.getElementById('ballotWeightLabel').innerHTML = `POUND <span>FOR POUND</span>`;
+    document.getElementById('ballotInstruction').textContent = 'SELECT YOUR TOP 10 · #1 IS THE BEST WRESTLER REGARDLESS OF WEIGHT';
+  } else if (activeBallot === TEAMS_KEY) {
+    document.getElementById('ballotWeightLabel').innerHTML = `TEAM <span>RANKINGS</span>`;
+    document.getElementById('ballotInstruction').textContent = 'SELECT YOUR TOP 25 · #1 IS THE BEST PROGRAM IN THE NATION';
+  } else {
+    document.getElementById('ballotWeightLabel').innerHTML = `${activeBallot} <span>LBS</span>`;
+    document.getElementById('ballotInstruction').textContent = 'SELECT YOUR TOP 8 · #1 IS YOUR PICK FOR BEST';
+  }
+
   if (isSubmitted) {
     document.getElementById('votingState').style.display = 'none';
     document.getElementById('successState').classList.add('visible');
-    document.getElementById('successMsg').textContent = `Your ${activeWeight} lbs ballot is live on the scoreboard.`;
+    document.getElementById('successMsg').textContent = `Your ${labelFor(activeBallot)} ballot is live on the scoreboard.`;
   } else {
     document.getElementById('votingState').style.display = '';
     document.getElementById('successState').classList.remove('visible');
@@ -633,33 +754,55 @@ function renderBallotCard() {
 }
 
 function renderWeightSelector() {
-  document.getElementById('weightSelector').innerHTML = weights.map(w =>
-    `<button class="wt-btn ${w === activeWeight ? 'active' : ''} ${submitted[w] && w !== activeWeight ? 'done' : ''}"
-      onclick="window.setWeight(${w})">${w}</button>`
+  const weightBtns = weights.map(w =>
+    `<button class="wt-btn ${w === activeBallot ? 'active' : ''} ${submitted[w] && w !== activeBallot ? 'done' : ''}"
+      onclick="window.setBallot(${w})">${w}</button>`
   ).join('');
+
+  const p4pBtn = `<button class="wt-btn special p4p ${activeBallot === P4P_KEY ? 'active' : ''} ${submitted[P4P_KEY] ? 'done' : ''}"
+      onclick="window.setBallot('${P4P_KEY}')">P4P</button>`;
+
+  const teamsBtn = `<button class="wt-btn special teams ${activeBallot === TEAMS_KEY ? 'active' : ''} ${submitted[TEAMS_KEY] ? 'done' : ''}"
+      onclick="window.setBallot('${TEAMS_KEY}')">Teams</button>`;
+
+  document.getElementById('weightSelector').innerHTML =
+    weightBtns + `<div class="wt-divider"></div>` + p4pBtn + teamsBtn;
 }
 
 function renderProgress() {
-  const done = weights.filter(w => submitted[w]);
-  const pct = Math.round((done.length / weights.length) * 100);
+  const done = allBallots.filter(b => submitted[b]);
+  const pct = Math.round((done.length / allBallots.length) * 100);
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressPct').textContent = `${done.length} of ${weights.length} weight classes voted`;
-  document.getElementById('progressList').innerHTML = weights.map(w =>
+  document.getElementById('progressPct').textContent = `${done.length} of ${allBallots.length} ballots submitted`;
+
+  const weightItems = weights.map(w =>
     `<div class="progress-item ${submitted[w] ? 'done' : ''}">
       <span class="wt">${w} lbs</span>
       <span class="status">${submitted[w] ? '✓ Voted' : '—'}</span>
     </div>`).join('');
+
+  const specialItems = `
+    <div class="progress-item special ${submitted[P4P_KEY] ? 'done' : ''}">
+      <span class="wt">P4P</span>
+      <span class="status">${submitted[P4P_KEY] ? '✓ Voted' : '—'}</span>
+    </div>
+    <div class="progress-item special ${submitted[TEAMS_KEY] ? 'done' : ''}">
+      <span class="wt">Teams</span>
+      <span class="status">${submitted[TEAMS_KEY] ? '✓ Voted' : '—'}</span>
+    </div>`;
+
+  document.getElementById('progressList').innerHTML = weightItems + specialItems;
 }
 
 function renderStats() {
-  const done = weights.filter(w => submitted[w]).length;
+  const done = allBallots.filter(b => submitted[b]).length;
   document.getElementById('statMyBallots').textContent = done;
   document.getElementById('statWeightsDone').textContent = done;
-  document.getElementById('statRemaining').textContent = weights.length - done;
+  document.getElementById('statRemaining').textContent = allBallots.length - done;
 }
 
 window.onSlotChange = onSlotChange;
-window.setWeight = setWeight;
+window.setBallot = setBallot;
 window.submitBallot = submitBallot;
 window.editBallot = editBallot;
 
@@ -671,7 +814,7 @@ window.editBallot = editBallot;
   renderBallotCard();
   renderProgress();
   renderStats();
-  fetchResults(activeWeight);
+  fetchResults(activeBallot);
 })();
 </script>
 
